@@ -11,6 +11,7 @@
 
 namespace CreaSystems.Api.Sunnyheat.EcoControl
 {
+    using CreaSystems.Api.SmartHome;
     #region Namespaces
 
     using System;
@@ -167,6 +168,15 @@ namespace CreaSystems.Api.Sunnyheat.EcoControl
             }
 
             return (IpAddress.Equals(other.IpAddress));
+        }
+
+        /// <summary>
+        /// Reboot the heater
+        /// </summary>
+        public void RebootHeater()
+        {
+            SmartHomeInterface.GetInstance().ESP32MeshIpAddress = IPAddress.Parse(IpAddress);
+            SmartHomeInterface.GetInstance().RebootESP32Network(Mac);
         }
 
         #endregion Methods

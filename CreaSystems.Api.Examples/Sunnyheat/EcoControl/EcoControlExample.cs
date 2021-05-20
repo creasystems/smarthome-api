@@ -14,6 +14,7 @@ namespace CreaSystems.Api.Examples.Sunnyheat.EcoControl
     #region Namespaces
 
     using CreaSystems.Api.Sunnyheat.EcoControl;
+    using System;
 
     #endregion Namespaces
 
@@ -38,7 +39,17 @@ namespace CreaSystems.Api.Examples.Sunnyheat.EcoControl
         /// </summary>
         internal EcoControlExample()
         {
+            Console.WriteLine("#################################");
+            Console.WriteLine("# CREA SYSTEMS Electronic GmbH: #");
+            Console.WriteLine("#################################");
+            Console.WriteLine(string.Empty);
+            Console.WriteLine("Start ECOcontrol example...");
+            Console.WriteLine(string.Empty);
+            Console.WriteLine("Initialize the example heaters...");
+
             InitializeHeaters();
+
+            Console.ReadLine();
         }
 
         #endregion Constructors
@@ -50,8 +61,15 @@ namespace CreaSystems.Api.Examples.Sunnyheat.EcoControl
         /// </summary>
         private void InitializeHeaters()
         {
+            //Create a new list of SUNNYHEAT infrared heaters
             heaterList = new SunnyheatInfraredHeaterList();
-            heaterList.AddHeater(new SunnyheatInfraredHeater("192.168.20.127", "Living room"));
+
+            //Add all SUNNYHEAT infrared heaters you need or want
+            heaterList.AddHeater(new SunnyheatInfraredHeater("192.168.20.128", "Living room"));
+            heaterList.AddHeater(new SunnyheatInfraredHeater("192.168.20.131", "Kitchen"));
+
+            //Reboot all SUNNYHEAT infrared heaters
+            heaterList.RebootAllHeaters();
         }
 
         #endregion Methods

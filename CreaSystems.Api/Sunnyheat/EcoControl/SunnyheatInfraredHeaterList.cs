@@ -51,11 +51,12 @@ namespace CreaSystems.Api.Sunnyheat.EcoControl
                 return;
             }
 
-            TryToGetMacInformationAsync(heater);
+            RefreshHeaterData(heater);
 
             heaterList.Add(heater);
 
-            Console.WriteLine("Heater with ip address {0} is added to the list.", heater.IpAddress);
+            Console.WriteLine("Heater with ip address {0} ({1}) has been added to the list.", heater.IpAddress, heater.Name);
+            Console.WriteLine(string.Empty);
         }
 
         /// <summary>
@@ -76,6 +77,8 @@ namespace CreaSystems.Api.Sunnyheat.EcoControl
                 }
 
                 heater.Mac = macs.Split(',')[0];
+
+                Console.WriteLine("Heater with ip address {0} has MAC: {1}.", heater.IpAddress, heater.Mac);
             }
         }
 
@@ -146,7 +149,18 @@ namespace CreaSystems.Api.Sunnyheat.EcoControl
                 }
             }
 
-            //TODO: Refresh the data from one heater via esp32 access
+            Console.WriteLine("Refresh the heater data for SUNNYHEAT infrared heater {0} ({1})", heater.Mac, heater.Name);
+        }
+
+        /// <summary>
+        /// Reboots all heaters.
+        /// </summary>
+        public void RebootAllHeaters()
+        {
+            foreach (SunnyheatInfraredHeater heater in heaterList)
+            {
+                heater.RebootHeater();
+            }
         }
 
         #endregion Methods

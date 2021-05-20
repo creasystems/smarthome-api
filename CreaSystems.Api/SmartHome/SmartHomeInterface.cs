@@ -103,8 +103,10 @@ namespace CreaSystems.Api.SmartHome
                 return;
             }
 
-            HttpClient client = new HttpClient();
-            client.Timeout = new TimeSpan(0, 0, 1);
+            HttpClient client = new HttpClient
+            {
+                Timeout = new TimeSpan(0, 0, 1)
+            };
 
             try
             {
@@ -149,6 +151,30 @@ namespace CreaSystems.Api.SmartHome
             }
 
             return httpWebRequest;
+        }
+
+        /// <summary>
+        /// Reboots the ESP32 network, if the param is empty.
+        /// Reboots the ESP32 of the param address
+        /// </summary>
+        internal void RebootESP32Network(string specificMac)
+        {
+            HttpWebRequest webRequest = GetWebRequestObjectForESP32(specificMac);
+
+            if (webRequest == null)
+            {
+                return;
+            }
+
+            using (var streamWriter = new StreamWriter(webRequest.GetRequestStream()))
+            {
+                string json = "{\"request\":\"reboot\"," +
+                              "\"delay\":50}";
+
+                streamWriter.Write(json);
+            }
+
+            _ = (HttpWebResponse)webRequest.GetResponse();
         }
 
         /// <summary>
@@ -218,30 +244,6 @@ namespace CreaSystems.Api.SmartHome
             }
 
             return resultDevices;
-        }
-
-        /// <summary>
-        /// Reboots the ESP32 network, if the param is empty.
-        /// Reboots the RSP32 of the param address
-        /// </summary>
-        internal void RebootESP32Network(string specificMac)
-        {
-            HttpWebRequest webRequest = GetWebRequestObjectForESP32(specificMac);
-
-            if (webRequest == null)
-            {
-                return;
-            }
-
-            using (var streamWriter = new StreamWriter(webRequest.GetRequestStream()))
-            {
-                string json = "{\"request\":\"reboot\"," +
-                              "\"delay\":50}";
-
-                streamWriter.Write(json);
-            }
-
-            _ = (HttpWebResponse)webRequest.GetResponse();
         }
 
         /// <summary>
