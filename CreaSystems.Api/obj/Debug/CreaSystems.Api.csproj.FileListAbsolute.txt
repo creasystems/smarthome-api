@@ -1,6 +1,0 @@
-D:\Entwicklung\Programmierung\DotNet\GitHub\smarthome-api\CreaSystems.Api\bin\Debug\CreaSystems.Api.dll
-D:\Entwicklung\Programmierung\DotNet\GitHub\smarthome-api\CreaSystems.Api\bin\Debug\CreaSystems.Api.pdb
-D:\Entwicklung\Programmierung\DotNet\GitHub\smarthome-api\CreaSystems.Api\obj\Debug\CreaSystems.Api.csproj.CoreCompileInputs.cache
-D:\Entwicklung\Programmierung\DotNet\GitHub\smarthome-api\CreaSystems.Api\obj\Debug\CreaSystems.Api.dll
-D:\Entwicklung\Programmierung\DotNet\GitHub\smarthome-api\CreaSystems.Api\obj\Debug\CreaSystems.Api.pdb
-D:\Entwicklung\Programmierung\DotNet\GitHub\smarthome-api\CreaSystems.Api\obj\Debug\CreaSystems.Api.csprojAssemblyReference.cache

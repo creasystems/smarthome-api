@@ -65,8 +65,9 @@ namespace CreaSystems.Api.Examples.Sunnyheat.EcoControl
             heaterList = new SunnyheatInfraredHeaterList();
 
             //Add all SUNNYHEAT infrared heaters you need or want
-            heaterList.AddHeater(new SunnyheatInfraredHeater("192.168.20.128", "Living room"));
-            heaterList.AddHeater(new SunnyheatInfraredHeater("192.168.20.131", "Kitchen"));
+            //heaterList.AddHeater(new SunnyheatInfraredHeater("192.168.20.128", "Living room"));
+            //heaterList.AddHeater(new SunnyheatInfraredHeater("192.168.20.131", "Kitchen"));
+            heaterList.AddHeater(new SunnyheatInfraredHeater("192.168.10.112", "IT"));
 
             //Reboot all SUNNYHEAT infrared heaters
             heaterList.RebootAllHeaters();
