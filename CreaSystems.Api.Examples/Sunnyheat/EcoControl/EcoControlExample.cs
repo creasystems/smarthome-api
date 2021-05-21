@@ -69,8 +69,35 @@ namespace CreaSystems.Api.Examples.Sunnyheat.EcoControl
             //heaterList.AddHeater(new SunnyheatInfraredHeater("192.168.20.131", "Kitchen"));
             heaterList.AddHeater(new SunnyheatInfraredHeater("192.168.10.112", "IT"));
 
-            //Reboot all SUNNYHEAT infrared heaters
-            heaterList.RebootAllHeaters();
+            //Get all informations for the SUNNYHEAT infrared heaters
+            foreach (SunnyheatInfraredHeater heater in heaterList.Heaters)
+            {
+                Console.WriteLine("SUNNYHEAT infrared heater mac: {0}", heater.Mac);
+                Console.WriteLine("-----------------------------------------------");
+                Console.WriteLine("IP Address: {0}", heater.IpAddress);
+                Console.WriteLine("Name: {0}", heater.Name);
+                Console.WriteLine("Has light: {0}", heater.LightFunctionIsActivated.ToString());
+                Console.WriteLine("Light state: {0}", heater.Light.ToString());
+                Console.WriteLine("Setpoint temperature: {0}", heater.SetpointTemperature);
+                Console.WriteLine("Room temperature: {0}", heater.RoomTemperature);
+                Console.WriteLine(string.Empty);
+            }
+
+            Console.WriteLine(string.Empty);
+            Console.WriteLine("Please press 1, if you want to reboot all heaters:");
+            Console.Write("Input: ");
+
+            if (Console.ReadKey().Key == ConsoleKey.D1)
+            {
+                Console.WriteLine(string.Empty);
+
+                //Reboot all SUNNYHEAT infrared heaters
+                heaterList.RebootAllHeaters();
+            }
+            else
+            {
+                Console.WriteLine("No reboot.");
+            }
         }
 
         #endregion Methods
