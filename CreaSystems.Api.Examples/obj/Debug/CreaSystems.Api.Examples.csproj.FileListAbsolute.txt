@@ -1,9 +1,0 @@
-D:\Entwicklung\Programmierung\DotNet\GitHub\smarthome-api\CreaSystems.Api.Examples\bin\Debug\CreaSystems.Api.Examples.exe.config
-D:\Entwicklung\Programmierung\DotNet\GitHub\smarthome-api\CreaSystems.Api.Examples\bin\Debug\CreaSystems.Api.Examples.exe
-D:\Entwicklung\Programmierung\DotNet\GitHub\smarthome-api\CreaSystems.Api.Examples\bin\Debug\CreaSystems.Api.Examples.pdb
-D:\Entwicklung\Programmierung\DotNet\GitHub\smarthome-api\CreaSystems.Api.Examples\bin\Debug\CreaSystems.Api.dll
-D:\Entwicklung\Programmierung\DotNet\GitHub\smarthome-api\CreaSystems.Api.Examples\obj\Debug\CreaSystems.Api.Examples.csprojAssemblyReference.cache
-D:\Entwicklung\Programmierung\DotNet\GitHub\smarthome-api\CreaSystems.Api.Examples\obj\Debug\CreaSystems.Api.Examples.csproj.CoreCompileInputs.cache
-D:\Entwicklung\Programmierung\DotNet\GitHub\smarthome-api\CreaSystems.Api.Examples\obj\Debug\CreaSystems.Api.Examples.csproj.CopyComplete
-D:\Entwicklung\Programmierung\DotNet\GitHub\smarthome-api\CreaSystems.Api.Examples\obj\Debug\CreaSystems.Api.Examples.exe
-D:\Entwicklung\Programmierung\DotNet\GitHub\smarthome-api\CreaSystems.Api.Examples\obj\Debug\CreaSystems.Api.Examples.pdb
