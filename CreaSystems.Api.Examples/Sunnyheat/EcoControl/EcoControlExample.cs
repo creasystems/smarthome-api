@@ -65,9 +65,10 @@ namespace CreaSystems.Api.Examples.Sunnyheat.EcoControl
             heaterList = new SunnyheatInfraredHeaterList();
 
             //Add all SUNNYHEAT infrared heaters you need or want
-            //heaterList.AddHeater(new SunnyheatInfraredHeater("192.168.20.128", "Living room"));
+            //heaterList.AddHeater(new SunnyheatInfraredHeater("192.168.20.127", "Living room"));
             //heaterList.AddHeater(new SunnyheatInfraredHeater("192.168.20.131", "Kitchen"));
-            heaterList.AddHeater(new SunnyheatInfraredHeater("192.168.10.112", "IT"));
+            //heaterList.AddHeater(new SunnyheatInfraredHeater("192.168.10.112", "IT"));
+            heaterList.AddHeater(new SunnyheatInfraredHeater("192.168.10.101", "IT"));
 
             if (heaterList.Heaters.Count == 0)
             {
@@ -96,11 +97,12 @@ namespace CreaSystems.Api.Examples.Sunnyheat.EcoControl
                 Console.WriteLine(string.Empty);
                 Console.WriteLine("Please choose the next action:");
                 Console.WriteLine("1 - Reboot all heaters");
-                Console.WriteLine("2 - Set new setpoint temperature");
-                Console.WriteLine("3 - Set new light state");
-                Console.WriteLine("4 - Get the current light state");
-                Console.WriteLine("5 - Get the current room temperature");
-                Console.WriteLine("6 - Get the current setpoint temperature");
+                Console.WriteLine("2 - Check for new version and start upgrade");
+                Console.WriteLine("3 - Set new setpoint temperature");
+                Console.WriteLine("4 - Set new light state");
+                Console.WriteLine("5 - Get the current light state");
+                Console.WriteLine("6 - Get the current room temperature");
+                Console.WriteLine("7 - Get the current setpoint temperature");
                 Console.WriteLine("Q - Quite example application");
                 Console.WriteLine(string.Empty);
                 Console.Write("Choose: ");
@@ -119,6 +121,10 @@ namespace CreaSystems.Api.Examples.Sunnyheat.EcoControl
                         heaterList.RebootAllHeaters();
                         break;
                     case ConsoleKey.D2:
+                        //Check for a new version and start upgrade
+                        heaterList.CheckForNewUpgradeAndStart();
+                        break;
+                    case ConsoleKey.D3:
                         //Set the setpoint temperature
                         Console.WriteLine("Please enter the new setpoint temperature.");
                         Console.WriteLine("Valid temperatures are between 0 and 45 C° in 0.5 steps.");
@@ -140,7 +146,7 @@ namespace CreaSystems.Api.Examples.Sunnyheat.EcoControl
                             Console.ForegroundColor = ConsoleColor.Gray;
                         }
                         break;
-                    case ConsoleKey.D3:
+                    case ConsoleKey.D4:
                         //Set the light state
                         Console.WriteLine(string.Empty);
 
@@ -165,21 +171,21 @@ namespace CreaSystems.Api.Examples.Sunnyheat.EcoControl
                             heaterList.Heaters[0].Light = EnumLightState.On;
                         }
                         break;
-                    case ConsoleKey.D4:
+                    case ConsoleKey.D5:
                         //Get the light state
                         Console.WriteLine(string.Empty);
                         Console.ForegroundColor = ConsoleColor.Green;
                         Console.WriteLine("The light function is {0} - The current light state is: {1}", heaterList.Heaters[0].LightFunctionIsActivated ? "activated" : "deactivated", heaterList.Heaters[0].Light == EnumLightState.On ? "on" : "off");
                         Console.ForegroundColor = ConsoleColor.Gray;
                         break;
-                    case ConsoleKey.D5:
+                    case ConsoleKey.D6:
                         //Get the room temperature
                         Console.WriteLine(string.Empty);
                         Console.ForegroundColor = ConsoleColor.Green;
                         Console.WriteLine("The current room temperature is {0} C°.", heaterList.Heaters[0].RoomTemperature);
                         Console.ForegroundColor = ConsoleColor.Gray;
                         break;
-                    case ConsoleKey.D6:
+                    case ConsoleKey.D7:
                         //Get the setpoint temperature
                         Console.WriteLine(string.Empty);
                         Console.ForegroundColor = ConsoleColor.Green;
