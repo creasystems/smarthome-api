@@ -9,15 +9,17 @@
 // <author>CREA SYSTEMS Electronic GmbH</author>
 //-------------------------------------------------------------------------------------------------------
 
+#region Namespaces
+
+using System;
+using System.Net.Sockets;
+using System.Reflection.Metadata;
+using System.Text;
+
+#endregion Namespaces
+
 namespace CreaSystems.Api.Examples.Sunnyheat.EcoControl
 {
-    #region Namespaces
-
-    using CreaSystems.Api.Sunnyheat.EcoControl;
-    using System;
-
-    #endregion Namespaces
-
     /// <summary>
     /// Example program to smart control the SUNNYHEAT infrared heaters.
     /// </summary>
@@ -28,7 +30,7 @@ namespace CreaSystems.Api.Examples.Sunnyheat.EcoControl
         /// <summary>
         /// The heater list
         /// </summary>
-        private SunnyheatInfraredHeaterList heaterList;
+        List<SunnyheatInfraredHeater> heaterList;
 
         #endregion Variables
 
@@ -62,31 +64,26 @@ namespace CreaSystems.Api.Examples.Sunnyheat.EcoControl
         private void InitializeHeaters()
         {
             //Create a new list of SUNNYHEAT infrared heaters
-            heaterList = new SunnyheatInfraredHeaterList();
-
-            //Add all SUNNYHEAT infrared heaters you need or want
-            heaterList.AddHeater(new SunnyheatInfraredHeater("192.168.20.127", "Living room"));
-            //heaterList.AddHeater(new SunnyheatInfraredHeater("192.168.20.131", "Kitchen"));
-            //heaterList.AddHeater(new SunnyheatInfraredHeater("192.168.10.112", "IT"));
-            //heaterList.AddHeater(new SunnyheatInfraredHeater("192.168.10.100", "IT"));
-
-            if (heaterList.Heaters.Count == 0)
+            //and add all SUNNYHEAT infrared heaters you need or want with their mac address.
+            //You will find the mac address of each SUNNYHEAT infrared heater in the SUNNYHEAT APP.
+            heaterList = new List<SunnyheatInfraredHeater>
             {
-                Console.WriteLine("No heaters connected!");
+                new SunnyheatInfraredHeater("03af0f3c09af", "Living room"),
+                new SunnyheatInfraredHeater("04bf0f5c09af", "Kitchen")
+            };
+
+            if (heaterList.Count == 0)
+            {
+                Console.WriteLine("No heaters initialized!");
                 return;
             }
 
             //Get all informations for the SUNNYHEAT infrared heaters
-            foreach (SunnyheatInfraredHeater heater in heaterList.Heaters)
+            foreach (SunnyheatInfraredHeater heater in heaterList)
             {
-                Console.WriteLine("SUNNYHEAT infrared heater mac: {0}", heater.Mac);
+                Console.WriteLine("SUNNYHEAT infrared heater mac: {0}", heater.MacAddress);
                 Console.WriteLine("-----------------------------------------------");
-                Console.WriteLine("IP Address: {0}", heater.IpAddress);
-                Console.WriteLine("Name: {0}", heater.Name);
-                Console.WriteLine("Has light: {0}", heater.LightFunctionIsActivated.ToString());
-                Console.WriteLine("Light state: {0}", heater.Light.ToString());
-                Console.WriteLine("Setpoint temperature: {0}", heater.SetpointTemperature);
-                Console.WriteLine("Room temperature: {0}", heater.RoomTemperature);
+                Console.WriteLine("Name: {0}", heater.HeaterName);
                 Console.WriteLine(string.Empty);
             }
 
@@ -96,118 +93,174 @@ namespace CreaSystems.Api.Examples.Sunnyheat.EcoControl
             {
                 Console.WriteLine(string.Empty);
                 Console.WriteLine("Please choose the next action:");
-                Console.WriteLine("1 - Reboot all heaters");
-                Console.WriteLine("2 - Check for new version and start upgrade");
-                Console.WriteLine("3 - Refresh all heater data");
-                Console.WriteLine("4 - Set new setpoint temperature");
-                Console.WriteLine("5 - Set new light state");
-                Console.WriteLine("6 - Get the current light state");
-                Console.WriteLine("7 - Get the current room temperature");
-                Console.WriteLine("8 - Get the current setpoint temperature");
-                Console.WriteLine("9 - Set current date and time to all heaters");
+                Console.WriteLine("1 - Set new target temperature");
+                Console.WriteLine("2 - Set new light state");
+                Console.WriteLine("3 - Get the current light state");
+                Console.WriteLine("4 - Get the current room temperature");
+                Console.WriteLine("5 - Get the current target temperature");
                 Console.WriteLine("Q - Quite example application");
                 Console.WriteLine(string.Empty);
                 Console.Write("Choose: ");
 
                 key = Console.ReadKey().Key;
 
+                Console.WriteLine(string.Empty);
+                Console.WriteLine("Please enter the heater mac address.");
+                string macInput = Console.ReadLine();
+
                 switch (key)
                 {
                     case ConsoleKey.Q:
                         break;
                     case ConsoleKey.D1:
-                        //Reboot all devices
-                        Console.WriteLine(string.Empty);
-
-                        //Reboot all SUNNYHEAT infrared heaters
-                        heaterList.RebootAllHeaters();
-                        break;
-                    case ConsoleKey.D2:
-                        //Check for a new version and start upgrade
-                        heaterList.CheckForNewUpgradeAndStart();
-                        break;
-                    case ConsoleKey.D3:
-                        //Refresh all heater data
-                        heaterList.RefreshAllHeaterDatas();
-                        break;
-                    case ConsoleKey.D4:
                         //Set the setpoint temperature
                         Console.WriteLine("Please enter the new setpoint temperature.");
                         Console.WriteLine("Valid temperatures are between 0 and 45 C° in 0.5 steps.");
-                        string input = Console.ReadLine();
-                        double newTemp;
+                        string input1 = Console.ReadLine();
+                        double value1;
 
-                        if (double.TryParse(input, out newTemp))
+                        if (double.TryParse(input1, out value1))
                         {
-                            heaterList.Heaters[0].SetpointTemperature = newTemp;
+                            HttpClient client1 = new()
+                            {
+                                BaseAddress = new Uri("http://localhost:8000/setTargetTemperature?id=" + macInput + "&value=" + value1)
+                            };
 
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.WriteLine("The temperature was set to {0} C°.", input);
-                            Console.ForegroundColor = ConsoleColor.Gray;
+                            HttpResponseMessage response1 = client1.GetAsync(string.Empty).Result;
+
+                            if (response1.IsSuccessStatusCode)
+                            {
+                                Console.ForegroundColor = response1.Content.ReadAsStringAsync().Result.ToLower().Contains("error") ? ConsoleColor.Red : ConsoleColor.Green;
+                                Console.WriteLine(response1.Content.ReadAsStringAsync().Result);
+                            }
+                            else
+                            {
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.WriteLine("Error during set target temperature process.");
+                            }
+
+                            // Dispose once all HttpClient calls are complete.
+                            client1.Dispose();
                         }
                         else
                         {
                             Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine("Input {0} is not valid!", input);
-                            Console.ForegroundColor = ConsoleColor.Gray;
+                            Console.WriteLine("Input {0} is not valid!", input1);
                         }
-                        break;
-                    case ConsoleKey.D5:
-                        //Set the light state
-                        Console.WriteLine(string.Empty);
 
-                        if (!heaterList.Heaters[0].LightFunctionIsActivated)
+                        Console.ForegroundColor = ConsoleColor.Gray;
+                        break;
+                    case ConsoleKey.D2:
+                        //Set the setpoint temperature
+                        Console.WriteLine("Please enter the new light state.");
+                        Console.WriteLine("Valid light state values are 0 (off) and 1 (on).");
+                        string input2 = Console.ReadLine();
+                        int value2;
+
+                        if (int.TryParse(input2, out value2))
+                        {
+                            HttpClient client2 = new()
+                            {
+                                BaseAddress = new Uri("http://localhost:8000/setLightState?id=" + macInput + "&value=" + value2)
+                            };
+
+                            HttpResponseMessage response2 = client2.GetAsync(string.Empty).Result;
+
+                            if (response2.IsSuccessStatusCode)
+                            {
+                                Console.ForegroundColor = response2.Content.ReadAsStringAsync().Result.ToLower().Contains("error") ? ConsoleColor.Red : ConsoleColor.Green;
+                                Console.WriteLine(response2.Content.ReadAsStringAsync().Result);
+                            }
+                            else
+                            {
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.WriteLine("Error during set light state process.");
+                            }
+
+                            // Dispose once all HttpClient calls are complete.
+                            client2.Dispose();
+                        }
+                        else
                         {
                             Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine("The light function is not activated on the ECOcontrol thermostat, so it is not possible to switch the light.");
-                            Console.ForegroundColor = ConsoleColor.Gray;
-                            continue;
+                            Console.WriteLine("Input {0} is not valid!", input2);
                         }
 
-                        Console.WriteLine("Please enter the new light state (0 = off, 1 = on).");
-
-                        ConsoleKey newLightState = Console.ReadKey().Key;
-
-                        if (newLightState == ConsoleKey.D0)
+                        Console.ForegroundColor = ConsoleColor.Gray;
+                        break;
+                    case ConsoleKey.D3:
+                        HttpClient client3 = new()
                         {
-                            heaterList.Heaters[0].Light = EnumLightState.Off;
-                        }
-                        else if (newLightState == ConsoleKey.D1)
+                            BaseAddress = new Uri("http://localhost:8000/getCurrentLightState?id=" + macInput)
+                        };
+
+                        HttpResponseMessage response3 = client3.GetAsync(string.Empty).Result;
+
+                        if (response3.IsSuccessStatusCode)
                         {
-                            heaterList.Heaters[0].Light = EnumLightState.On;
+                            Console.ForegroundColor = response3.Content.ReadAsStringAsync().Result.ToLower().Contains("error") ? ConsoleColor.Red : ConsoleColor.Green;
+                            Console.WriteLine(response3.Content.ReadAsStringAsync().Result);
                         }
-                        break;
-                    case ConsoleKey.D6:
-                        //Get the light state
-                        Console.WriteLine(string.Empty);
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        Console.WriteLine("The light function is {0} - The current light state is: {1}", heaterList.Heaters[0].LightFunctionIsActivated ? "activated" : "deactivated", heaterList.Heaters[0].Light == EnumLightState.On ? "on" : "off");
+                        else
+                        {
+                            Console.WriteLine("Error during get current light state process.");
+                        }
+
+                        // Dispose once all HttpClient calls are complete.
+                        client3.Dispose();
+
                         Console.ForegroundColor = ConsoleColor.Gray;
                         break;
-                    case ConsoleKey.D7:
-                        //Get the room temperature
-                        Console.WriteLine(string.Empty);
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        Console.WriteLine("The current room temperature is {0} C°.", heaterList.Heaters[0].RoomTemperature);
+                    case ConsoleKey.D4:
+                        HttpClient client4 = new()
+                        {
+                            BaseAddress = new Uri("http://localhost:8000/getCurrentTemperatur?id=" + macInput)
+                        };
+
+                        HttpResponseMessage response4 = client4.GetAsync(string.Empty).Result;
+
+                        if (response4.IsSuccessStatusCode)
+                        {
+                            Console.ForegroundColor = response4.Content.ReadAsStringAsync().Result.ToLower().Contains("error") ? ConsoleColor.Red : ConsoleColor.Green;
+                            Console.WriteLine(response4.Content.ReadAsStringAsync().Result);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Error during get current room temperature process.");
+                        }
+
+                        // Dispose once all HttpClient calls are complete.
+                        client4.Dispose();
+
                         Console.ForegroundColor = ConsoleColor.Gray;
                         break;
-                    case ConsoleKey.D8:
-                        //Get the setpoint temperature
-                        Console.WriteLine(string.Empty);
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        Console.WriteLine("The current setpoint temperature is {0} C°.", heaterList.Heaters[0].SetpointTemperature);
+                    case ConsoleKey.D5:
+                        HttpClient client5 = new()
+                        {
+                            BaseAddress = new Uri("http://localhost:8000/getCurrentTargetTemperatur?id=" + macInput)
+                        };
+
+                        HttpResponseMessage response5 = client5.GetAsync(string.Empty).Result;
+
+                        if (response5.IsSuccessStatusCode)
+                        {
+                            Console.ForegroundColor = response5.Content.ReadAsStringAsync().Result.ToLower().Contains("error") ? ConsoleColor.Red : ConsoleColor.Green;
+                            Console.WriteLine(response5.Content.ReadAsStringAsync().Result);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Error during get current target temperature process.");
+                        }
+
+                        // Dispose once all HttpClient calls are complete.
+                        client5.Dispose();
+
                         Console.ForegroundColor = ConsoleColor.Gray;
-                        break;
-                    case ConsoleKey.D9:
-                        //Set the current date and time to all heaters
-                        heaterList.SetCurrentDateTime();
                         break;
                     default:
                         break;
                 }
             }
-
-
         }
 
         #endregion Methods
