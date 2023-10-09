@@ -9,15 +9,6 @@
 // <author>CREA SYSTEMS Electronic GmbH</author>
 //-------------------------------------------------------------------------------------------------------
 
-#region Namespaces
-
-using System;
-using System.Net.Sockets;
-using System.Reflection.Metadata;
-using System.Text;
-
-#endregion Namespaces
-
 namespace CreaSystems.Api.Examples.Sunnyheat.EcoControl
 {
     /// <summary>
@@ -25,15 +16,6 @@ namespace CreaSystems.Api.Examples.Sunnyheat.EcoControl
     /// </summary>
     internal class EcoControlExample
     {
-        #region Variables
-
-        /// <summary>
-        /// The heater list
-        /// </summary>
-        List<SunnyheatInfraredHeater> heaterList;
-
-        #endregion Variables
-
         #region Constructors
 
         /// <summary>
@@ -41,15 +23,14 @@ namespace CreaSystems.Api.Examples.Sunnyheat.EcoControl
         /// </summary>
         internal EcoControlExample()
         {
-            Console.WriteLine("#################################");
-            Console.WriteLine("# CREA SYSTEMS Electronic GmbH: #");
-            Console.WriteLine("#################################");
+            Console.WriteLine("################################");
+            Console.WriteLine("# CREA SYSTEMS Electronic GmbH #");
+            Console.WriteLine("################################");
             Console.WriteLine(string.Empty);
             Console.WriteLine("Start ECOcontrol example...");
             Console.WriteLine(string.Empty);
-            Console.WriteLine("Initialize the example heaters...");
 
-            InitializeHeaters();
+            StartExample();
 
             Console.ReadLine();
         }
@@ -59,34 +40,10 @@ namespace CreaSystems.Api.Examples.Sunnyheat.EcoControl
         #region Methods
 
         /// <summary>
-        /// Initializes the heaters.
+        /// Starts the example.
         /// </summary>
-        private void InitializeHeaters()
+        private static void StartExample()
         {
-            //Create a new list of SUNNYHEAT infrared heaters
-            //and add all SUNNYHEAT infrared heaters you need or want with their mac address.
-            //You will find the mac address of each SUNNYHEAT infrared heater in the SUNNYHEAT APP.
-            heaterList = new List<SunnyheatInfraredHeater>
-            {
-                new SunnyheatInfraredHeater("03af0f3c09af", "Living room"),
-                new SunnyheatInfraredHeater("04bf0f5c09af", "Kitchen")
-            };
-
-            if (heaterList.Count == 0)
-            {
-                Console.WriteLine("No heaters initialized!");
-                return;
-            }
-
-            //Get all informations for the SUNNYHEAT infrared heaters
-            foreach (SunnyheatInfraredHeater heater in heaterList)
-            {
-                Console.WriteLine("SUNNYHEAT infrared heater mac: {0}", heater.MacAddress);
-                Console.WriteLine("-----------------------------------------------");
-                Console.WriteLine("Name: {0}", heater.HeaterName);
-                Console.WriteLine(string.Empty);
-            }
-
             ConsoleKey key = ConsoleKey.Escape;
 
             while (key != ConsoleKey.Q)
@@ -104,19 +61,23 @@ namespace CreaSystems.Api.Examples.Sunnyheat.EcoControl
 
                 key = Console.ReadKey().Key;
 
+                if(key == ConsoleKey.Q )
+                {
+                    //Exit application
+                    Environment.Exit(0);
+                }
+
                 Console.WriteLine(string.Empty);
                 Console.WriteLine("Please enter the heater mac address.");
-                string macInput = Console.ReadLine();
+                string? macInput = Console.ReadLine();
 
                 switch (key)
                 {
-                    case ConsoleKey.Q:
-                        break;
                     case ConsoleKey.D1:
                         //Set the setpoint temperature
                         Console.WriteLine("Please enter the new setpoint temperature.");
                         Console.WriteLine("Valid temperatures are between 0 and 45 C° in 0.5 steps.");
-                        string input1 = Console.ReadLine();
+                        string? input1 = Console.ReadLine();
                         double value1;
 
                         if (double.TryParse(input1, out value1))
@@ -154,7 +115,7 @@ namespace CreaSystems.Api.Examples.Sunnyheat.EcoControl
                         //Set the setpoint temperature
                         Console.WriteLine("Please enter the new light state.");
                         Console.WriteLine("Valid light state values are 0 (off) and 1 (on).");
-                        string input2 = Console.ReadLine();
+                        string? input2 = Console.ReadLine();
                         int value2;
 
                         if (int.TryParse(input2, out value2))

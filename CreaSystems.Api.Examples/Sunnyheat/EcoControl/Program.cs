@@ -21,11 +21,7 @@ namespace CreaSystems.Api.Examples.Sunnyheat.EcoControl
         /// <summary>
         /// Defines the entry point of the application.
         /// </summary>
-        /// <param name="args">The arguments.</param>
-        public static void Main(string[] args)
-        {
-            new EcoControlExample();
-        }
+        public static void Main() => _ = new EcoControlExample();
 
         #endregion Methods
     }
