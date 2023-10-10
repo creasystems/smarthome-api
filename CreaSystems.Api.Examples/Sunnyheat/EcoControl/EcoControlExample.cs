@@ -44,6 +44,14 @@ namespace CreaSystems.Api.Examples.Sunnyheat.EcoControl
         /// </summary>
         private static void StartExample()
         {
+            Console.WriteLine(string.Empty);
+            Console.WriteLine("Please enter the meshid.");
+            string? meshId = Console.ReadLine();
+
+            Console.WriteLine(string.Empty);
+            Console.WriteLine("Please enter the heater mac address.");
+            string? macInput = Console.ReadLine();
+
             ConsoleKey key = ConsoleKey.Escape;
 
             while (key != ConsoleKey.Q)
@@ -67,10 +75,6 @@ namespace CreaSystems.Api.Examples.Sunnyheat.EcoControl
                     Environment.Exit(0);
                 }
 
-                Console.WriteLine(string.Empty);
-                Console.WriteLine("Please enter the heater mac address.");
-                string? macInput = Console.ReadLine();
-
                 switch (key)
                 {
                     case ConsoleKey.D1:
@@ -84,7 +88,7 @@ namespace CreaSystems.Api.Examples.Sunnyheat.EcoControl
                         {
                             HttpClient client1 = new()
                             {
-                                BaseAddress = new Uri("http://localhost:8000/setTargetTemperature?id=" + macInput + "&value=" + value1)
+                                BaseAddress = new Uri(string.Concat("http://creashgateway.local:8000/setTargetTemp?meshid=", meshId, "mac=", macInput, "&value=", value1, "&ref=abc123"))
                             };
 
                             HttpResponseMessage response1 = client1.GetAsync(string.Empty).Result;
@@ -122,7 +126,7 @@ namespace CreaSystems.Api.Examples.Sunnyheat.EcoControl
                         {
                             HttpClient client2 = new()
                             {
-                                BaseAddress = new Uri("http://localhost:8000/setLightState?id=" + macInput + "&value=" + value2)
+                                BaseAddress = new Uri(string.Concat("http://creashgateway.local:8000/setLightState?meshid=", meshId, "mac=", macInput, "&value=", value2, "&ref=abc123"))
                             };
 
                             HttpResponseMessage response2 = client2.GetAsync(string.Empty).Result;
@@ -152,7 +156,7 @@ namespace CreaSystems.Api.Examples.Sunnyheat.EcoControl
                     case ConsoleKey.D3:
                         HttpClient client3 = new()
                         {
-                            BaseAddress = new Uri("http://localhost:8000/getCurrentLightState?id=" + macInput)
+                            BaseAddress = new Uri(string.Concat("http://creashgateway.local:8000/getLightState?meshid=", meshId, "mac=", macInput, "&ref=abc123"))
                         };
 
                         HttpResponseMessage response3 = client3.GetAsync(string.Empty).Result;
@@ -175,7 +179,7 @@ namespace CreaSystems.Api.Examples.Sunnyheat.EcoControl
                     case ConsoleKey.D4:
                         HttpClient client4 = new()
                         {
-                            BaseAddress = new Uri("http://localhost:8000/getCurrentTemperatur?id=" + macInput)
+                            BaseAddress = new Uri(string.Concat("http://creashgateway.local:8000/getCurrentTemp?meshid=", meshId, "mac=", macInput, "&ref=abc123"))
                         };
 
                         HttpResponseMessage response4 = client4.GetAsync(string.Empty).Result;
@@ -198,7 +202,7 @@ namespace CreaSystems.Api.Examples.Sunnyheat.EcoControl
                     case ConsoleKey.D5:
                         HttpClient client5 = new()
                         {
-                            BaseAddress = new Uri("http://localhost:8000/getCurrentTargetTemperatur?id=" + macInput)
+                            BaseAddress = new Uri(string.Concat("http://creashgateway.local:8000/getTargetTemp?meshid=", meshId, "mac=", macInput, "&ref=abc123"))
                         };
 
                         HttpResponseMessage response5 = client5.GetAsync(string.Empty).Result;
