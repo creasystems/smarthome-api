@@ -60,9 +60,7 @@ namespace CreaSystems.Api.Examples.Sunnyheat.EcoControl
                 Console.WriteLine("Please choose the next action:");
                 Console.WriteLine("1 - Set new target temperature");
                 Console.WriteLine("2 - Set new light state");
-                Console.WriteLine("3 - Get the current light state");
-                Console.WriteLine("4 - Get the current room temperature");
-                Console.WriteLine("5 - Get the current target temperature");
+                Console.WriteLine("3 - Get the current data");
                 Console.WriteLine("Q - Quite example application");
                 Console.WriteLine(string.Empty);
                 Console.Write("Choose: ");
@@ -88,7 +86,7 @@ namespace CreaSystems.Api.Examples.Sunnyheat.EcoControl
                         {
                             HttpClient client1 = new()
                             {
-                                BaseAddress = new Uri(string.Concat("http://creashgateway.local:8000/setTargetTemp?meshid=", meshId, "mac=", macInput, "&value=", value1, "&ref=abc123"))
+                                BaseAddress = new Uri(string.Concat("http://creashgateway.local:8000/setTargetTemp?meshid=", meshId, "&mac=", macInput, "&value=", value1, "&ref=abc12345"))
                             };
 
                             HttpResponseMessage response1 = client1.GetAsync(string.Empty).Result;
@@ -126,7 +124,7 @@ namespace CreaSystems.Api.Examples.Sunnyheat.EcoControl
                         {
                             HttpClient client2 = new()
                             {
-                                BaseAddress = new Uri(string.Concat("http://creashgateway.local:8000/setLightState?meshid=", meshId, "mac=", macInput, "&value=", value2, "&ref=abc123"))
+                                BaseAddress = new Uri(string.Concat("http://creashgateway.local:8000/setLightState?meshid=", meshId, "&mac=", macInput, "&value=", value2, "&ref=abc12345"))
                             };
 
                             HttpResponseMessage response2 = client2.GetAsync(string.Empty).Result;
@@ -156,7 +154,7 @@ namespace CreaSystems.Api.Examples.Sunnyheat.EcoControl
                     case ConsoleKey.D3:
                         HttpClient client3 = new()
                         {
-                            BaseAddress = new Uri(string.Concat("http://creashgateway.local:8000/getLightState?meshid=", meshId, "mac=", macInput, "&ref=abc123"))
+                            BaseAddress = new Uri(string.Concat("http://creashgateway.local:8000/getCurrentData?meshid=", meshId, "&mac=", macInput, "&ref=abc12345&value=1"))
                         };
 
                         HttpResponseMessage response3 = client3.GetAsync(string.Empty).Result;
@@ -168,57 +166,12 @@ namespace CreaSystems.Api.Examples.Sunnyheat.EcoControl
                         }
                         else
                         {
-                            Console.WriteLine("Error during get current light state process.");
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("Error during get current data process.");
                         }
 
                         // Dispose once all HttpClient calls are complete.
                         client3.Dispose();
-
-                        Console.ForegroundColor = ConsoleColor.Gray;
-                        break;
-                    case ConsoleKey.D4:
-                        HttpClient client4 = new()
-                        {
-                            BaseAddress = new Uri(string.Concat("http://creashgateway.local:8000/getCurrentTemp?meshid=", meshId, "mac=", macInput, "&ref=abc123"))
-                        };
-
-                        HttpResponseMessage response4 = client4.GetAsync(string.Empty).Result;
-
-                        if (response4.IsSuccessStatusCode)
-                        {
-                            Console.ForegroundColor = response4.Content.ReadAsStringAsync().Result.ToLower().Contains("error") ? ConsoleColor.Red : ConsoleColor.Green;
-                            Console.WriteLine(response4.Content.ReadAsStringAsync().Result);
-                        }
-                        else
-                        {
-                            Console.WriteLine("Error during get current room temperature process.");
-                        }
-
-                        // Dispose once all HttpClient calls are complete.
-                        client4.Dispose();
-
-                        Console.ForegroundColor = ConsoleColor.Gray;
-                        break;
-                    case ConsoleKey.D5:
-                        HttpClient client5 = new()
-                        {
-                            BaseAddress = new Uri(string.Concat("http://creashgateway.local:8000/getTargetTemp?meshid=", meshId, "mac=", macInput, "&ref=abc123"))
-                        };
-
-                        HttpResponseMessage response5 = client5.GetAsync(string.Empty).Result;
-
-                        if (response5.IsSuccessStatusCode)
-                        {
-                            Console.ForegroundColor = response5.Content.ReadAsStringAsync().Result.ToLower().Contains("error") ? ConsoleColor.Red : ConsoleColor.Green;
-                            Console.WriteLine(response5.Content.ReadAsStringAsync().Result);
-                        }
-                        else
-                        {
-                            Console.WriteLine("Error during get current target temperature process.");
-                        }
-
-                        // Dispose once all HttpClient calls are complete.
-                        client5.Dispose();
 
                         Console.ForegroundColor = ConsoleColor.Gray;
                         break;
