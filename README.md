@@ -3,11 +3,11 @@ A api (written in C#) for smart home devices from CREA SYSTEMS Electronic GmbH.
 
 ## Contents
 
-  - [Requirements for use] (#requirements-for-use)
+  - [Requirements](#reguirements)
   - [Supported Devices](#supported-devices)
   - [SUNNYHEAT Infrared heater](#sunnyheat-infrared-heater)
 
-### Requirements for use
+### Requirements
 
 To use this smarthome-api, you need the following reguirements
   - CREA SmartHome Gateway
