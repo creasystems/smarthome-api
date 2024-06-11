@@ -31,11 +31,9 @@ With this device type, you can set the setpoint temperature and the light state.
 | Set Target temperature     | With this command you can set the target temperature of the heater:<br>Possible values are 0 to 30.0 degress in 0.5 steps. |
 |                            | http://creashgateway.local:8000/setTargetTemp?meshid=[MeshName]&mac=[MacAdressHeater]&value=[Degree]&ref=[UniqueMessageId] |
 |                            | http://creashgateway.local:8000/setTargetTemp?meshid=testMesh&mac=0a:0a:0a:0a:0a:0a&value=20.0&ref=abc12345                |
-
 | Set Light state            | With this command you can set the light state of a connected light: Possible values are 0 (off) or 1 (on).                 |
 |                            | http://creashgateway.local:8000/setLightState?meshid=[MeshName]&mac=[MacAdressHeater]&value=[0or1]&ref=[UniqueMessageId]   |
 |                            | http://creashgateway.local:8000/setLightState?meshid=testMesh&mac=0a:0a:0a:0a:0a:0a&value=1&ref=abc12345                   |
-
 | Get current data           | With this command you can get the current data from the heater.                                                            |
 |                            | http://creashgateway.local:8000/getCurrentData?meshid=[MeshName]&mac=[MacAdressHeater]&value=[1]&ref=[UniqueMessageId]     |
 |                            | http://creashgateway.local:8000/getCurrentData?meshid=testMesh&mac=0a:0a:0a:0a:0a:0a&value=1&ref=abc12345                  |
