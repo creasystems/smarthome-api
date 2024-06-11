@@ -21,7 +21,7 @@ namespace CreaSystems.Api.Examples.Sunnyheat.EcoControl
         /// <summary>
         /// The random object
         /// </summary>
-        private static Random _Random = new();
+        private static readonly Random _Random = new();
 
         #endregion
 
