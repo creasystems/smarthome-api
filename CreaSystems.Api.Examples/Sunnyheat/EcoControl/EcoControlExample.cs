@@ -16,6 +16,15 @@ namespace CreaSystems.Api.Examples.Sunnyheat.EcoControl
     /// </summary>
     internal class EcoControlExample
     {
+        #region Variables
+
+        /// <summary>
+        /// The random object
+        /// </summary>
+        private static Random _Random = new();
+
+        #endregion
+
         #region Constructors
 
         /// <summary>
@@ -35,7 +44,7 @@ namespace CreaSystems.Api.Examples.Sunnyheat.EcoControl
             Console.ReadLine();
         }
 
-        #endregion Constructors
+        #endregion
 
         #region Methods
 
@@ -86,7 +95,7 @@ namespace CreaSystems.Api.Examples.Sunnyheat.EcoControl
                         {
                             HttpClient client1 = new()
                             {
-                                BaseAddress = new Uri(string.Concat("http://creashgateway.local:8000/setTargetTemp?meshid=", meshId, "&mac=", macInput, "&value=", value1, "&ref=abc12345"))
+                                BaseAddress = new Uri(string.Concat("http://creashgateway.local:8000/setTargetTemp?meshid=", meshId, "&mac=", macInput, "&value=", value1, "&ref=", RandomString(8)))
                             };
 
                             HttpResponseMessage response1 = client1.GetAsync(string.Empty).Result;
@@ -124,7 +133,7 @@ namespace CreaSystems.Api.Examples.Sunnyheat.EcoControl
                         {
                             HttpClient client2 = new()
                             {
-                                BaseAddress = new Uri(string.Concat("http://creashgateway.local:8000/setLightState?meshid=", meshId, "&mac=", macInput, "&value=", value2, "&ref=abc12345"))
+                                BaseAddress = new Uri(string.Concat("http://creashgateway.local:8000/setLightState?meshid=", meshId, "&mac=", macInput, "&value=", value2, "&ref=", RandomString(8)))
                             };
 
                             HttpResponseMessage response2 = client2.GetAsync(string.Empty).Result;
@@ -154,7 +163,7 @@ namespace CreaSystems.Api.Examples.Sunnyheat.EcoControl
                     case ConsoleKey.D3:
                         HttpClient client3 = new()
                         {
-                            BaseAddress = new Uri(string.Concat("http://creashgateway.local:8000/getCurrentData?meshid=", meshId, "&mac=", macInput, "&ref=abc12345&value=1"))
+                            BaseAddress = new Uri(string.Concat("http://creashgateway.local:8000/getCurrentData?meshid=", meshId, "&mac=", macInput, "&ref=", RandomString(8), "&value=1"))
                         };
 
                         HttpResponseMessage response3 = client3.GetAsync(string.Empty).Result;
@@ -181,6 +190,18 @@ namespace CreaSystems.Api.Examples.Sunnyheat.EcoControl
             }
         }
 
-        #endregion Methods
+        /// <summary>
+        /// Randoms the string.
+        /// </summary>
+        /// <param name="length">The length.</param>
+        /// <returns></returns>
+        public static string RandomString(int length)
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            return new string(Enumerable.Repeat(chars, length)
+                .Select(s => s[_Random.Next(s.Length)]).ToArray());
+        }
+
+        #endregion
     }
 }

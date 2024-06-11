@@ -23,6 +23,6 @@ namespace CreaSystems.Api.Examples.Sunnyheat.EcoControl
         /// </summary>
         public static void Main() => _ = new EcoControlExample();
 
-        #endregion Methods
+        #endregion
     }
 }
