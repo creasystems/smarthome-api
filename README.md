@@ -14,6 +14,9 @@ To use this smarthome-api, you need the following reguirements
   - Minimum one of the supported devices
   - The smartphone app CREAconnect to preconfigure the mesh
   
+To communicate with the smart home devices, you need the meshid and the mac address of the device.<br>
+These information you find in the CREAconnect app.
+  
 ### Supported Devices
 
 Currently, the smarthome-api supports the following devices.
